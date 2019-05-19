@@ -28,7 +28,19 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     mGainControlSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
     mGainControlSlider.setRange(gainParameter->range.start, gainParameter->range.end);
     mGainControlSlider.setValue(*gainParameter);
-    mGainControlSlider.addListener(this);
+
+    mGainControlSlider.onDragStart = [gainParameter] {
+        gainParameter->beginChangeGesture();
+    };
+    
+    mGainControlSlider.onValueChange = [this, gainParameter] {
+        *gainParameter = mGainControlSlider.getValue();
+    };
+    
+    mGainControlSlider.onDragEnd = [gainParameter] {
+        gainParameter->endChangeGesture();
+    };
+
     addAndMakeVisible(mGainControlSlider);
     
 }
@@ -52,17 +64,4 @@ void NewProjectAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-}
-
-void NewProjectAudioProcessorEditor::sliderValueChanged (Slider* slider)
-{
-
-    auto& params = processor.getParameters();
-
-    if (slider == &mGainControlSlider) {
-        AudioParameterFloat* gainParameter = (AudioParameterFloat*)params.getUnchecked(0);
-        *gainParameter = mGainControlSlider.getValue();
-        DBG("CHANGED THE GAIN");
-    }
-    
 }

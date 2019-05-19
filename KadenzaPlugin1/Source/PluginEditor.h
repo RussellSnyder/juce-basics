@@ -16,8 +16,7 @@
 //==============================================================================
 /**
 */
-class NewProjectAudioProcessorEditor  : public AudioProcessorEditor,
-                                        public Slider::Listener
+class NewProjectAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
     NewProjectAudioProcessorEditor (NewProjectAudioProcessor&);
@@ -27,8 +26,6 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
-    void sliderValueChanged (Slider* slider) override;
-    
 private:
 
     Slider mGainControlSlider;
